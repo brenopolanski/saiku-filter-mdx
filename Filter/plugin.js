@@ -80,7 +80,7 @@ var Filter = Backbone.View.extend({
 					'<div class="filter-form">' +
 						'<label for="">Escolha a variável para inserir na expressão</label>' +
 						'<select class="form-control" name="" id="">' +
-							'<% _.each(this.data.metadata, function(val) { %>' +
+							'<% _.each(data, function(val) { %>' +
 							'<option value=""><%= val.colName %></option>' +
 							'<% }); %>' +
 						'</select>' +
@@ -153,8 +153,9 @@ var Filter = Backbone.View.extend({
 					'</div>' +
 				'</div>' +
 
-			'</div>'
-		);
+			'</div>')({
+				data: this.data.metadata
+			});
 
 		// Add template in this.$el
 		this.$el.html(this.html);
@@ -179,7 +180,7 @@ var Filter = Backbone.View.extend({
     },
 
 	process_data: function(args) {
-		console.log(args);
+		// console.log(args);
 
         if (args.data.cellset && args.data.cellset.length > 0) {
         	var DIMENSION = 'Variavel',
@@ -256,8 +257,11 @@ var Filter = Backbone.View.extend({
         	// Render results
         	this.render();
 
+        	// console.log(this.data);
+        	// console.log(JSON.stringify(this.data));
+
         	// _.each(this.data.metadata, function(val) {
-        	// 	console.log(val.colName);
+        	// 	console.log(val);
         	// });
         }
         else {
