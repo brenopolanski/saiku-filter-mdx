@@ -1,0 +1,93 @@
+/* 
+	TODO
+
+	1. [ ] Corrigir a interface
+	2. [ ] Verificar nome das classes
+*/
+
+/* debug */
+
+.db {
+	border: 1px solid #000;
+}
+
+/* tools */
+
+.filter-tools {
+    height: 50px;
+    border: 1px solid #BBB;
+    background: #EEE;
+    background: -webkit-gradient(linear, left top, left bottom, from(#F0F0F0), to(#EEE));
+    background: -moz-linear-gradient(top, #F0F0F0 0%, #EEE 100%);
+    background: linear-gradient(top, #F0F0F0 0%, #EEE 100%);
+}
+
+/* menu */
+
+.filter-menu ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 7px 10px 7px 10px;
+}
+
+.filter-menu > li {
+    float: left;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.filter-menu ul li {
+    display: inline-block;
+    float: left;
+    margin: 0;
+    padding-right: 6px;
+}
+
+.filter-menu ul li a {
+    border: 1px solid transparent;
+    display: block;
+    height: 26px;
+    padding: 4px;
+    width: 26px;
+}
+
+.filter-menu ul li a:hover {
+    background-color: #FFF;
+    border: 1px solid #CCC;
+    padding: 4px;
+    -webkit-border-radius: 2px;
+       -moz-border-radius: 2px;
+            border-radius: 2px;
+}
+
+/* separator */
+
+.filter-menu ul li.separator {
+    border-left: 1px solid #CCC;
+    display: block;
+    height: 26px;
+    padding: 4px 4px 6px 4px;
+    width: 1px;
+}
+
+/* button to right */
+
+.filter-menu ul li.right {
+	position: absolute;
+	right: 5px;
+}
+
+/* form */
+
+.filter-form {
+	margin-top: 20px;
+}
+
+.filter-form label {
+	display: block;
+}
+
+.filter-form .form-control {
+	width: 100%;
+	height: 25px;
+}
