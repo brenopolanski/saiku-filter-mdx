@@ -80,9 +80,9 @@ var Filter = Backbone.View.extend({
 					'<div class="filter-form">' +
 						'<label for="">Escolha a variável para inserir na expressão</label>' +
 						'<select class="form-control" name="" id="">' +
-							// '<% _each(this.data, function(val, key) { %>' +
-							// '<option value=""><%= val %></option>' +
-							// '<% }); %>' +
+							'<% _.each(this.data.metadata, function(val) { %>' +
+							'<option value=""><%= val.colName %></option>' +
+							'<% }); %>' +
 						'</select>' +
 					'</div>' +
 				'</div>' +
@@ -256,7 +256,9 @@ var Filter = Backbone.View.extend({
         	// Render results
         	this.render();
 
-        	console.log(this.data);
+        	// _.each(this.data.metadata, function(val) {
+        	// 	console.log(val.colName);
+        	// });
         }
         else {
         	this.$el.text('No results');
