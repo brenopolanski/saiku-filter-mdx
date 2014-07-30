@@ -81,71 +81,75 @@ var FilterMDX = Backbone.View.extend({
     },
 
 	process_data: function(args) {
-		if (args.data.cellset && args.data.cellset.length > 0) {
-			var ROWS = args.data.cellset.length,
+        if (args.data.cellset && args.data.cellset.length > 0) {
+        	var DIMENSION = 'Variavel',
+        		ROWS = args.data.cellset.length,
 				COLUMNS = args.data.cellset[0].length;
 
 			this.data = {
-	        	metadata: [],
+        		metadata: [],
 	        	resultset: [],
 	        	width: 0,
 	        	height: 0
 	        };
 
-        	var row,
-        		column;
+	        var row,
+        		column
 
         	for (row = 0; row < ROWS; row += 1) {
         		for (column = 0; column < COLUMNS; column += 1) {
-	        		if (args.data.cellset[row][column].type === 'ROW_HEADER_HEADER') {
-	    				this.data.metadata.push({
-	    					colIndex: column,
-	    					colName: args.data.cellset[row][column].value,
-	    					colType: this.type_validation(args.data.cellset[row + 1][column].value),
-	    					properties: {
+        			if (args.data.cellset[row][column].type === 'ROW_HEADER' &&
+        				args.data.cellset[row][column].properties.dimension === DIMENSION) {
+
+        				this.data.metadata.push({
+        					colIndex: column,
+        					colName: args.data.cellset[row][column].value,
+        					colType: this.type_validation(args.data.cellset[row][column].value),
+        					properties: {
         						dimension: args.data.cellset[row][column].properties.dimension,
         						hierarchy: args.data.cellset[row][column].properties.hierarchy,
         						level: args.data.cellset[row][column].properties.level,
     							uniquename: args.data.cellset[row][column].properties.uniquename
         					}
-	    				});
-	        		}
-	        		else if (args.data.cellset[row][column].type === 'COLUMN_HEADER') {
-	    				this.data.metadata.push({
-	    					colIndex: column,
-	    					colName: args.data.cellset[row][column].value,
-	    					colType: this.type_validation(args.data.cellset[row + 1][column].value),
-	    					properties: {
+        				});
+        			}
+        			else if (args.data.cellset[row][column].type === 'COLUMN_HEADER' &&
+        					 args.data.cellset[row][column].properties.dimension === DIMENSION) {
+
+        				this.data.metadata.push({
+        					colIndex: column,
+        					colName: args.data.cellset[row][column].value,
+        					colType: this.type_validation(args.data.cellset[row][column].value),
+        					properties: {
         						dimension: args.data.cellset[row][column].properties.dimension,
         						hierarchy: args.data.cellset[row][column].properties.hierarchy,
         						level: args.data.cellset[row][column].properties.level,
     							uniquename: args.data.cellset[row][column].properties.uniquename
         					}
-	    				});
-	        		}
-	        		else if ((args.data.cellset[row][column].type === 'ROW_HEADER') ||
-	        				 (args.data.cellset[row][column].type === 'DATA_CELL')) {
+        				});
+        			}
+	        		else if (args.data.cellset[row][column].type === 'DATA_CELL') {
 
-        				var value = args.data.cellset[row][column].value;
+	        			var value = args.data.cellset[row][column].value;
 
-        				// check if the resultset contains the raw value, 
-        				// if not try to parse the given value
         				if (args.data.cellset[row][column].properties.raw && 
         					args.data.cellset[row][column].properties.raw !== 'null' && column > 0) {
 
-        					value = parseFloat(args.data.cellset[row][column].properties.raw);
+    						value = parseFloat(args.data.cellset[row][column].properties.raw);
         				}
-        				else if (typeof(args.data.cellset[row][column].value) !== 'number' &&
-                        	parseFloat(args.data.cellset[row][column].value.replace(/[^a-zA-Z 0-9.]+/g,'')) && column > 0) {
+        				else if (typeof(args.data.cellset[row][column].value) !== 'number' && 
+        					     parseFloat(args.data.cellset[row][column].value.replace(/[^a-zA-Z 0-9.]+/g,'')) && 
+        					     column > 0) {
 
-        					value = parseFloat(args.data.cellset[row][column].value.replace(/[^a-zA-Z 0-9.]+/g,''));
+    						value = parseFloat(args.data.cellset[row][column].value.replace(/[^a-zA-Z 0-9.]+/g,''));
         				}
         				this.data.resultset.push(value);
 	        		}
         		}
         	}
+
         	this.data.height = ROWS;
-        	this.data.width = COLUMNS;
+    		this.data.width = COLUMNS;
 
         	// Render results
         	this.render();
@@ -195,7 +199,6 @@ function loadJS(file) {
   */
 Saiku.events.bind('session:new', function() {
 
-	loadCSS('js/saiku/plugins/FilterMDX/css/960.css');	
 	loadCSS('js/saiku/plugins/FilterMDX/css/plugin.css');	
 	loadJS('js/saiku/plugins/FilterMDX/js/FilterMDX.js');
 

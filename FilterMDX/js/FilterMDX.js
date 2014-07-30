@@ -1,5 +1,12 @@
 var DemoModal = Modal.extend({
     type: 'filtermdx',
+
+    // add events :)
+
+    buttons: [
+    	{ text: 'Create Filter' },
+    	{ text: 'Cancel' }
+    ],
     
     initialize: function(args) {
         this.options.title = 'Filter';
@@ -7,52 +14,28 @@ var DemoModal = Modal.extend({
         this.message = _.template(
 			'<div class="container_12">' +
 				// #1
-				// '<div class="grid_12">' +
-				// 	'<div class="filter-tools">' +
-				// 		'<nav class="filter-menu">' +
-				// 			'<ul>' +
-				// 				'<li>' +
-				// 					'<a href="javascript:void(0);">' +
-				// 						'<img src="js/saiku/plugins/Filter/image/filter-new.png" alt="">' +
-				// 					'</a>' +
-				// 				'</li>' +
-				// 				'<li class="right">' +
-				// 					'<a href="javascript:void(0);">' +
-				// 						'<img src="js/saiku/plugins/Filter/image/filter-help.png" alt="">' +
-				// 					'</a>' +
-				// 				'</li>' +
-				// 			'</ul>' +
-				// 		'</nav>' +
-				// 	'</div>' +
-				// '</div>' +
-
-				'<div class="clear"></div>' +
-
-				// #2
 				'<div class="grid_11">' +
-					'<div class="filter-form">' +
+					'<div class="filtermdx-form">' +
 						'<label for="">Escolha a variável para inserir na expressão</label>' +
 						'<select class="form-control" name="" id="">' +
-							'<% _.each(data.data.metadata, function(val) { %>' +
+							'<% _.each(args.data.metadata, function(val) { %>' +
+							'<option value="">-- Selecione --</option>' +
 							'<option value=""><%= val.colName %></option>' +
 							'<% }); %>' +
 						'</select>' +
 					'</div>' +
 				'</div>' +
 				'<div class="grid_1" style="margin-top: 18px;">' +
-					'<div class="filter-form">' +
+					'<div class="filtermdx-form">' +
 						'<button class="form-control" name="" id="">add</button>' +
 					'</div>' +
 				'</div>' +
-
-				'<div class="clear"></div>' +
-
-				// #3
+				// #2
 				'<div class="grid_5">' +
-					'<div class="filter-form">' +
+					'<div class="filtermdx-form">' +
 						'<label for="">Lista de operadores lógicos</label>' +
 						'<select class="form-control" name="" id="">' +
-							'<option value=""></option>' +
+							'<option value="">-- Selecione --</option>' +
 							'<option value="">Igual (=)</option>' +
 							'<option value="">Diferente (<>)</option>' +
 							'<option value="">Maior (>)</option>' +
@@ -63,56 +46,50 @@ var DemoModal = Modal.extend({
 					'</div>' +
 				'</div>' +
 				'<div class="grid_1" style="margin-top: 18px;">' +
-					'<div class="filter-form">' +
+					'<div class="filtermdx-form">' +
 						'<button class="form-control" name="" id="">add</button>' +
 					'</div>' +
 				'</div>' +
 
 				'<div class="grid_5">' +
-					'<div class="filter-form">' +
+					'<div class="filtermdx-form">' +
 						'<label for="">Digite um valor</label>' +
 						'<input type="text" class="form-control" name="" id="">' +
 					'</div>' +
 				'</div>' +
 				'<div class="grid_1" style="margin-top: 18px;">' +
-					'<div class="filter-form">' +
+					'<div class="filtermdx-form">' +
 						'<button class="form-control" name="" id="">add</button>' +
 					'</div>' +
 				'</div>' +
-
-				'<div class="clear"></div>' +
-
-				// #4
+				// #3
 				'<div class="grid_12">' +
-					'<div class="filter-form">' +
-						// '<textarea class="form-control" name="" id="editor-filter" cols="30" rows="10" style="height: 150px;"></textarea>' +
-						'<div id="editor-filter"></div>' +
+					'<div class="filtermdx-form">' +
+						'<div id="editor-filtermdx"></div>' +
 					'</div>' +
 				'</div>' +
-
-				'<div class="clear"></div>' +
-
-				// #5
+				// #4
 				'<div class="grid_12">' +
 					'<p>Prévia de saída:</p>' +
 				'</div>' +
-
-				'<div class="clear"></div>' +
-
-				// #6
-				// '<div class="grid_12">' +
-				// 	'<div class="filter-form">' +
-				// 		'<button class="" name="" id="">Ok</button>' +
-				// 		'<button class="" name="" id="">Cancelar</button>' +
-				// 	'</div>' +
-				// '</div>' +
-
 			'</div>'
-		)({ data: args });
+		)({ args: args });
 
         this.bind('open', function() {
        		var self = this;
         	$(self.el).parents('.ui-dialog').css({ width: '550px' });
         });
+
+        // Maintain `this` in callbacks
+		_.bindAll(this, 'start_ace');
+
+		// create function
+		_.delay(this.start_ace, 1000);
+    },
+
+    start_ace: function() {
+		var editor = ace.edit('editor-filtermdx');
+		// editor.setTheme('ace/theme/monokai');
+		// editor.getSession().setMode('ace/mode/java');
     }
 });
