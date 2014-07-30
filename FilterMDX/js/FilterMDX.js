@@ -14,15 +14,27 @@ var DemoModal = Modal.extend({
         this.message = _.template(
 			'<div class="container_12">' +
 				// #1
-				'<div class="grid_11">' +
+				'<div class="grid_5">' +
 					'<div class="filtermdx-form">' +
-						'<label for="">Escolha a variável para inserir na expressão</label>' +
+						'<label for="">Variável</label>' +
 						'<select class="form-control" name="" id="">' +
-							'<% _.each(args.data.metadata, function(val) { %>' +
 							'<option value="">-- Selecione --</option>' +
+							'<% _.each(args.data.metadata, function(val) { %>' +
 							'<option value=""><%= val.colName %></option>' +
 							'<% }); %>' +
 						'</select>' +
+					'</div>' +
+				'</div>' +
+				'<div class="grid_1" style="margin-top: 18px;">' +
+					'<div class="filtermdx-form">' +
+						'<button class="form-control" name="" id="">add</button>' +
+					'</div>' +
+				'</div>' +
+
+				'<div class="grid_5">' +
+					'<div class="filtermdx-form">' +
+						'<label for="">Ano</label>' +
+						'<input type="text" class="form-control" name="" id="">' +
 					'</div>' +
 				'</div>' +
 				'<div class="grid_1" style="margin-top: 18px;">' +

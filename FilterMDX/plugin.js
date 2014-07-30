@@ -27,6 +27,9 @@ var FilterMDX = Backbone.View.extend({
 		// Add template HTML in workspace
 		this.template();
 
+		// Set swap_axis in localstorge with true
+		localStorage.setItem('swap_axis', 'true');
+
 		// Listen to result event
 		this.workspace.bind('query:result', this.receive_data);
 
@@ -82,7 +85,7 @@ var FilterMDX = Backbone.View.extend({
 
 	process_data: function(args) {
         if (args.data.cellset && args.data.cellset.length > 0) {
-        	var DIMENSION = 'Variavel',
+        	var DIMENSION = ['Variavel', 'Variável'],
         		ROWS = args.data.cellset.length,
 				COLUMNS = args.data.cellset[0].length;
 
@@ -99,7 +102,9 @@ var FilterMDX = Backbone.View.extend({
         	for (row = 0; row < ROWS; row += 1) {
         		for (column = 0; column < COLUMNS; column += 1) {
         			if (args.data.cellset[row][column].type === 'ROW_HEADER' &&
-        				args.data.cellset[row][column].properties.dimension === DIMENSION) {
+        			    _.find(DIMENSION, function(dim) { 
+    			    		return args.data.cellset[row][column].properties.dimension === dim 
+        				})) {
 
         				this.data.metadata.push({
         					colIndex: column,
@@ -114,7 +119,9 @@ var FilterMDX = Backbone.View.extend({
         				});
         			}
         			else if (args.data.cellset[row][column].type === 'COLUMN_HEADER' &&
-        					 args.data.cellset[row][column].properties.dimension === DIMENSION) {
+        					 _.find(DIMENSION, function(dim) { 
+    							return args.data.cellset[row][column].properties.dimension === dim 
+    						 })) {
 
         				this.data.metadata.push({
         					colIndex: column,
@@ -200,6 +207,7 @@ function loadJS(file) {
 Saiku.events.bind('session:new', function() {
 
 	loadCSS('js/saiku/plugins/FilterMDX/css/plugin.css');	
+	loadJS('js/saiku/plugins/FilterMDX/js/localstorage.js');
 	loadJS('js/saiku/plugins/FilterMDX/js/FilterMDX.js');
 
 	function new_workspace(args) {
