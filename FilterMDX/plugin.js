@@ -27,8 +27,8 @@ var FilterMDX = Backbone.View.extend({
 		// Add template HTML in workspace
 		this.template();
 
-		// Set swap_axis in localstorge with true
-		localStorage.setItem('swap_axis', 'true');
+		// Set swap_axis in localstorge with row
+		localStorage.setItem('swap_axis', 'row');
 
 		// Listen to result event
 		this.workspace.bind('query:result', this.receive_data);
@@ -52,6 +52,12 @@ var FilterMDX = Backbone.View.extend({
 	},
 
 	show: function() {
+		// this.workspace.query.action.get('/mdx', {
+  //           success: function(model, response) {
+  //           	console.log(response.mdx);
+  //           	(new DemoModal({ data: this.data })).render().open();
+  //           }
+  //       });
 		(new DemoModal({ data: this.data })).render().open();
 	},
 
@@ -90,14 +96,14 @@ var FilterMDX = Backbone.View.extend({
 				COLUMNS = args.data.cellset[0].length;
 
 			this.data = {
+				mdx: [],
         		metadata: [],
-	        	resultset: [],
 	        	width: 0,
 	        	height: 0
 	        };
 
 	        var row,
-        		column
+        		column;
 
         	for (row = 0; row < ROWS; row += 1) {
         		for (column = 0; column < COLUMNS; column += 1) {
@@ -135,23 +141,6 @@ var FilterMDX = Backbone.View.extend({
         					}
         				});
         			}
-	        		else if (args.data.cellset[row][column].type === 'DATA_CELL') {
-
-	        			var value = args.data.cellset[row][column].value;
-
-        				if (args.data.cellset[row][column].properties.raw && 
-        					args.data.cellset[row][column].properties.raw !== 'null' && column > 0) {
-
-    						value = parseFloat(args.data.cellset[row][column].properties.raw);
-        				}
-        				else if (typeof(args.data.cellset[row][column].value) !== 'number' && 
-        					     parseFloat(args.data.cellset[row][column].value.replace(/[^a-zA-Z 0-9.]+/g,'')) && 
-        					     column > 0) {
-
-    						value = parseFloat(args.data.cellset[row][column].value.replace(/[^a-zA-Z 0-9.]+/g,''));
-        				}
-        				this.data.resultset.push(value);
-	        		}
         		}
         	}
 
