@@ -77,7 +77,7 @@ var DemoModal = Modal.extend({
 				// #3
 				'<div class="grid_12">' +
 					'<div class="filtermdx-form">' +
-						'<div id="editor-filtermdx"></div>' +
+						'<div id="editor-filtermdx"><%= args.data.mdx %></div>' +
 					'</div>' +
 				'</div>' +
 				// #4

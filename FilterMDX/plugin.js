@@ -19,7 +19,7 @@ var FilterMDX = Backbone.View.extend({
 
 		// Maintain `this` in callbacks
 		_.bindAll(this, 'add_button', 'show', 'template', 'render', 'receive_data', 
-			      'process_data', 'event1', 'event2');
+			      'process_data', 'set_localstorage_mdx');
 
 		// Add button in workspace toolbar
 		this.add_button();
@@ -52,12 +52,10 @@ var FilterMDX = Backbone.View.extend({
 	},
 
 	show: function() {
-		// this.workspace.query.action.get('/mdx', {
-  //           success: function(model, response) {
-  //           	console.log(response.mdx);
-  //           	(new DemoModal({ data: this.data })).render().open();
-  //           }
-  //       });
+		this.data.mdx = localStorage.getItem('filter_mdx');
+		
+		console.log(this.data.mdx);
+
 		(new DemoModal({ data: this.data })).render().open();
 	},
 
@@ -96,7 +94,7 @@ var FilterMDX = Backbone.View.extend({
 				COLUMNS = args.data.cellset[0].length;
 
 			this.data = {
-				mdx: [],
+				mdx: '',
         		metadata: [],
 	        	width: 0,
 	        	height: 0
@@ -149,18 +147,22 @@ var FilterMDX = Backbone.View.extend({
 
         	// Render results
         	this.render();
+        	
+        	this.set_localstorage_mdx();
         }
         else {
         	this.$el.text('No results');
         }
 	},
 
-	event1: function() {
-		// Hi, you can add one event!! Let's Go :)
-	},
+	set_localstorage_mdx: function() {
+		this.workspace.query.action.get('/mdx', {
+            success: function(model, response) {
+            	localStorage.setItem('filter_mdx', response.mdx);
+            }
+        });
 
-	event2: function() {
-		// Hi, you can add one event!! Let's Go :)
+		// this.data.mdx = localStorage.getItem('filter_mdx');
 	}
 });
 
