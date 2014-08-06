@@ -51,9 +51,7 @@ var FilterMDX = Backbone.View.extend({
 		this.workspace.toolbar.filterMDX = this.show;
 	},
 
-	show: function() {
-		this.data.mdx = localStorage.getItem('filter_mdx');
-		
+	show: function() {		
 		console.log(this.data.mdx);
 
 		(new DemoModal({ data: this.data })).render().open();
@@ -88,6 +86,8 @@ var FilterMDX = Backbone.View.extend({
     },
 
 	process_data: function(args) {
+		console.log(args);
+
         if (args.data.cellset && args.data.cellset.length > 0) {
         	var DIMENSION = ['Variavel', 'Variável'],
         		ROWS = args.data.cellset.length,
@@ -96,6 +96,7 @@ var FilterMDX = Backbone.View.extend({
 			this.data = {
 				mdx: '',
         		metadata: [],
+        		swap_var: '',
 	        	width: 0,
 	        	height: 0
 	        };
@@ -105,7 +106,13 @@ var FilterMDX = Backbone.View.extend({
 
         	for (row = 0; row < ROWS; row += 1) {
         		for (column = 0; column < COLUMNS; column += 1) {
-        			if (args.data.cellset[row][column].type === 'ROW_HEADER' &&
+        			if (args.data.cellset[row][column].type === 'ROW_HEADER_HEADER' &&
+        			    _.find(DIMENSION, function(dim) { 
+    			    		return args.data.cellset[row][column].properties.dimension === dim 
+        				})) {
+        				this.data.swap_var = 'rows';
+        			}
+        			else if (args.data.cellset[row][column].type === 'ROW_HEADER' &&
         			    _.find(DIMENSION, function(dim) { 
     			    		return args.data.cellset[row][column].properties.dimension === dim 
         				})) {
@@ -127,6 +134,8 @@ var FilterMDX = Backbone.View.extend({
     							return args.data.cellset[row][column].properties.dimension === dim 
     						 })) {
 
+        				this.data.swap_var = 'columns';
+
         				this.data.metadata.push({
         					colIndex: column,
         					colName: args.data.cellset[row][column].value,
@@ -145,10 +154,12 @@ var FilterMDX = Backbone.View.extend({
         	this.data.height = ROWS;
     		this.data.width = COLUMNS;
 
+    		console.log(this.data);
+
         	// Render results
         	this.render();
         	
-        	this.set_localstorage_mdx();
+        	_.delay(this.set_localstorage_mdx, 100);
         }
         else {
         	this.$el.text('No results');
@@ -162,7 +173,7 @@ var FilterMDX = Backbone.View.extend({
             }
         });
 
-		// this.data.mdx = localStorage.getItem('filter_mdx');
+		this.data.mdx = localStorage.getItem('filter_mdx');
 	}
 });
 

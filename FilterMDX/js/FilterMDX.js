@@ -1,14 +1,18 @@
 var DemoModal = Modal.extend({
     type: 'filtermdx',
 
-    // add events :)
+    events: {
+    	'click .add_to_exp': 'logical_expression'
+    },
 
     buttons: [
     	{ text: 'Create Filter' },
-    	{ text: 'Cancel' }
+    	{ text: 'Cancel', method: 'close' }
     ],
     
     initialize: function(args) {
+    	this.data = args;
+
         this.options.title = 'Filter';
 
         this.message = _.template(
@@ -17,17 +21,17 @@ var DemoModal = Modal.extend({
 				'<div class="grid_5">' +
 					'<div class="filtermdx-form">' +
 						'<label for="">Variável</label>' +
-						'<select class="form-control" name="" id="">' +
+						'<select class="form-control" name="select_var" id="select_var">' +
 							'<option value="">-- Selecione --</option>' +
 							'<% _.each(args.data.metadata, function(val) { %>' +
-							'<option value=""><%= val.colName %></option>' +
+							'<option value="<%= val.properties.uniquename %>"><%= val.colName %></option>' +
 							'<% }); %>' +
 						'</select>' +
 					'</div>' +
 				'</div>' +
 				'<div class="grid_1" style="margin-top: 18px;">' +
 					'<div class="filtermdx-form">' +
-						'<button class="form-control" name="" id="">add</button>' +
+						'<button class="form-control add_to_exp" name="add_var" id="add_var">add</button>' +
 					'</div>' +
 				'</div>' +
 
@@ -103,5 +107,14 @@ var DemoModal = Modal.extend({
 		var editor = ace.edit('editor-filtermdx');
 		// editor.setTheme('ace/theme/monokai');
 		// editor.getSession().setMode('ace/mode/java');
+    },
+
+    logical_expression: function(event) {
+    	if (event.target.id === 'add_var') {
+			console.log($('#select_var option:selected').val());
+    	}
+    	else {
+    		console.log('Ops');
+    	}
     }
 });
