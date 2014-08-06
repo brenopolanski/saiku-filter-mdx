@@ -54,6 +54,8 @@ var FilterMDX = Backbone.View.extend({
 	show: function() {		
 		console.log(this.data.mdx);
 
+		this.data.mdx = localStorage.getItem('filter_mdx');
+
 		(new DemoModal({ data: this.data })).render().open();
 	},
 
@@ -94,6 +96,7 @@ var FilterMDX = Backbone.View.extend({
 				COLUMNS = args.data.cellset[0].length;
 
 			this.data = {
+				exp: '',
 				mdx: '',
         		metadata: [],
         		swap_var: '',
@@ -159,7 +162,8 @@ var FilterMDX = Backbone.View.extend({
         	// Render results
         	this.render();
         	
-        	_.delay(this.set_localstorage_mdx, 100);
+        	// 
+        	this.set_localstorage_mdx();
         }
         else {
         	this.$el.text('No results');
@@ -172,8 +176,6 @@ var FilterMDX = Backbone.View.extend({
             	localStorage.setItem('filter_mdx', response.mdx);
             }
         });
-
-		this.data.mdx = localStorage.getItem('filter_mdx');
 	}
 });
 

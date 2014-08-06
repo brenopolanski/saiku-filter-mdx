@@ -2,7 +2,7 @@ var DemoModal = Modal.extend({
     type: 'filtermdx',
 
     events: {
-    	'click .add_to_exp': 'logical_expression'
+    	'click .add-to-exp': 'logical_expression'
     },
 
     buttons: [
@@ -11,7 +11,7 @@ var DemoModal = Modal.extend({
     ],
     
     initialize: function(args) {
-    	this.data = args;
+    	this.data = args.data;
 
         this.options.title = 'Filter';
 
@@ -21,7 +21,7 @@ var DemoModal = Modal.extend({
 				'<div class="grid_5">' +
 					'<div class="filtermdx-form">' +
 						'<label for="">Variável</label>' +
-						'<select class="form-control" name="select_var" id="select_var">' +
+						'<select class="form-control" name="select-var" id="select-var">' +
 							'<option value="">-- Selecione --</option>' +
 							'<% _.each(args.data.metadata, function(val) { %>' +
 							'<option value="<%= val.properties.uniquename %>"><%= val.colName %></option>' +
@@ -31,51 +31,53 @@ var DemoModal = Modal.extend({
 				'</div>' +
 				'<div class="grid_1" style="margin-top: 18px;">' +
 					'<div class="filtermdx-form">' +
-						'<button class="form-control add_to_exp" name="add_var" id="add_var">add</button>' +
+						'<button class="form-control add-to-exp" name="add-var" id="add-var">add</button>' +
 					'</div>' +
 				'</div>' +
 
-				'<div class="grid_5">' +
-					'<div class="filtermdx-form">' +
-						'<label for="">Ano</label>' +
-						'<input type="text" class="form-control" name="" id="">' +
-					'</div>' +
-				'</div>' +
-				'<div class="grid_1" style="margin-top: 18px;">' +
-					'<div class="filtermdx-form">' +
-						'<button class="form-control" name="" id="">add</button>' +
-					'</div>' +
-				'</div>' +
+				// '<div class="grid_5">' +
+				// 	'<div class="filtermdx-form">' +
+				// 		'<label for="">Ano</label>' +
+				// 		'<input type="text" class="form-control" name="" id="">' +
+				// 	'</div>' +
+				// '</div>' +
+				// '<div class="grid_1" style="margin-top: 18px;">' +
+				// 	'<div class="filtermdx-form">' +
+				// 		'<button class="form-control" name="" id="">add</button>' +
+				// 	'</div>' +
+				// '</div>' +
 				// #2
 				'<div class="grid_5">' +
 					'<div class="filtermdx-form">' +
 						'<label for="">Lista de operadores lógicos</label>' +
-						'<select class="form-control" name="" id="">' +
+						'<select class="form-control" name="select-log" id="select-log">' +
 							'<option value="">-- Selecione --</option>' +
-							'<option value="">Igual (=)</option>' +
-							'<option value="">Diferente (<>)</option>' +
-							'<option value="">Maior (>)</option>' +
-							'<option value="">Menor (<)</option>' +
-							'<option value="">Maior ou igual (>=)</option>' +
-							'<option value="">Menor ou igual (<=)</option>' +
+							'<option value="=">Igual (=)</option>' +
+							'<option value="<>">Diferente (<>)</option>' +
+							'<option value=">">Maior (>)</option>' +
+							'<option value="<">Menor (<)</option>' +
+							'<option value=">=">Maior ou igual (>=)</option>' +
+							'<option value="<=">Menor ou igual (<=)</option>' +
+							'<option value="and">AND</option>' +
+							'<option value="or">OR</option>' +
 						'</select>' +
 					'</div>' +
 				'</div>' +
 				'<div class="grid_1" style="margin-top: 18px;">' +
 					'<div class="filtermdx-form">' +
-						'<button class="form-control" name="" id="">add</button>' +
+						'<button class="form-control add-to-exp" name="add-log" id="add-log">add</button>' +
 					'</div>' +
 				'</div>' +
 
 				'<div class="grid_5">' +
 					'<div class="filtermdx-form">' +
 						'<label for="">Digite um valor</label>' +
-						'<input type="text" class="form-control" name="" id="">' +
+						'<input type="text" class="form-control" name="input-val" id="input-val">' +
 					'</div>' +
 				'</div>' +
 				'<div class="grid_1" style="margin-top: 18px;">' +
 					'<div class="filtermdx-form">' +
-						'<button class="form-control" name="" id="">add</button>' +
+						'<button class="form-control add-to-exp" name="add-val" id="add-val">add</button>' +
 					'</div>' +
 				'</div>' +
 				// #3
@@ -101,6 +103,8 @@ var DemoModal = Modal.extend({
 
 		// create function
 		_.delay(this.start_ace, 1000);
+
+		this.split_mdx();
     },
 
     start_ace: function() {
@@ -110,11 +114,29 @@ var DemoModal = Modal.extend({
     },
 
     logical_expression: function(event) {
-    	if (event.target.id === 'add_var') {
-			console.log($('#select_var option:selected').val());
+       	switch (event.target.id) {
+		case 'add-var':
+			if (this.data.exp === '') {
+				this.data.exp = '(' + $('#select-var option:selected').val() + ')' + ' ';
+			}
+			else {
+				this.data.exp += '(' + $('#select-var option:selected').val() + ')' + ' ';	
+			}
+			break;
+		case 'add-log':
+			this.data.exp += $('#select-log option:selected').val() + ' ';
+			break;
+		case 'add-val':
+			this.data.exp += $('#input-val').val() + ' ';
+			break;
     	}
-    	else {
-    		console.log('Ops');
-    	}
+
+    	console.log(this.data);
+    },
+
+    split_mdx: function() {
+    	this.data.mdx = this.data.mdx.split('\n');
+
+    	console.log(this.data);
     }
 });
