@@ -18,23 +18,13 @@ var FilterMDX = Backbone.View.extend({
         this.BASE_URL = 'js/saiku/plugins/FilterMDX/';
 
 		// Maintain `this` in callbacks
-		_.bindAll(this, 'add_button', 'show', 'template', 'render', 'receive_data', 
-			      'process_data', 'set_localstorage_mdx');
+		_.bindAll(this, 'add_button', 'show', 'receive_data', 'process_data', 'set_localstorage_mdx');
 
 		// Add button in workspace toolbar
 		this.add_button();
-		
-		// Add template HTML in workspace
-		this.template();
-
-		// Set swap_axis in localstorge with row
-		localStorage.setItem('swap_axis', 'row');
 
 		// Listen to result event
 		this.workspace.bind('query:result', this.receive_data);
-
-		// Listen to adjust event
-		this.workspace.bind('workspace:adjust', this.render);
 	},
 
 	add_button: function() {
@@ -52,26 +42,9 @@ var FilterMDX = Backbone.View.extend({
 	},
 
 	show: function() {		
-		console.log(this.data.mdx);
-
 		this.data.mdx = localStorage.getItem('filter_mdx');
 
-		(new DemoModal({ data: this.data })).render().open();
-	},
-
-	template: function() {
-		// Create template HTML
-		this.html = _.template('<h1>Let\'s Go Rock and Roll :D</h1>');
-
-		// Add template in this.$el
-		this.$el.html(this.html);
-
-		// Insert template in workspace results
-		this.workspace.$el.find('.workspace_results').prepend(this.$el.hide());
-	},
-
-	render: function() {
-		// Render results...
+		(new FilterMDX({ data: this.data })).render().open();
 	},
 
     receive_data: function(args) {
@@ -96,11 +69,11 @@ var FilterMDX = Backbone.View.extend({
 				COLUMNS = args.data.cellset[0].length;
 
 			this.data = {
+        		metadata: [],
+        		swap_var: '',
 				exp: '',
 				mdx: '',
 				tplmdx: '',
-        		metadata: [],
-        		swap_var: '',
 	        	width: 0,
 	        	height: 0
 	        };
@@ -157,9 +130,6 @@ var FilterMDX = Backbone.View.extend({
 
         	this.data.height = ROWS;
     		this.data.width = COLUMNS;
-
-        	// Render results
-        	this.render();
         	
         	// 
         	this.set_localstorage_mdx();
@@ -209,8 +179,10 @@ function loadJS(file) {
   */
 Saiku.events.bind('session:new', function() {
 
+	// load style CSS
 	loadCSS('js/saiku/plugins/FilterMDX/css/plugin.css');	
-	loadJS('js/saiku/plugins/FilterMDX/js/localstorage.js');
+
+	// load modal Filter MDX
 	loadJS('js/saiku/plugins/FilterMDX/js/FilterMDX.js');
 
 	function new_workspace(args) {
