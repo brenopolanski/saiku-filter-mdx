@@ -2,10 +2,12 @@ var DemoModal = Modal.extend({
     type: 'filtermdx',
 
     events: {
-    	'click .add-to-exp': 'logical_expression'
+    	'click .add-to-exp': 'logical_expression',
+    	'click #teste': 'create_exp_filter'
     },
 
     buttons: [
+    	// { text: 'Create Filter', method: 'create_exp_filter' },
     	{ text: 'Create Filter' },
     	{ text: 'Cancel', method: 'close' }
     ],
@@ -83,12 +85,13 @@ var DemoModal = Modal.extend({
 				// #3
 				'<div class="grid_12">' +
 					'<div class="filtermdx-form">' +
-						'<div id="editor-filtermdx"><%= args.data.mdx %></div>' +
+						'<div id="editor-mdx"></div>' +
 					'</div>' +
 				'</div>' +
 				// #4
 				'<div class="grid_12">' +
 					'<p>Prévia de saída:</p>' +
+					'<a href="javascript:void(0)" id="teste">teste</a>' +
 				'</div>' +
 			'</div>'
 		)({ args: args });
@@ -99,18 +102,17 @@ var DemoModal = Modal.extend({
         });
 
         // Maintain `this` in callbacks
-		_.bindAll(this, 'start_ace');
+		_.bindAll(this, 'start_editor');
 
 		// create function
-		_.delay(this.start_ace, 1000);
+		_.delay(this.start_editor, 1000);
 
 		this.split_mdx();
     },
 
-    start_ace: function() {
-		var editor = ace.edit('editor-filtermdx');
-		// editor.setTheme('ace/theme/monokai');
-		// editor.getSession().setMode('ace/mode/java');
+    start_editor: function() {
+		this.editor = ace.edit('editor-mdx');
+		this.editor.getSession().setMode('ace/mode/text');
     },
 
     logical_expression: function(event) {
@@ -118,25 +120,43 @@ var DemoModal = Modal.extend({
 		case 'add-var':
 			if (this.data.exp === '') {
 				this.data.exp = '(' + $('#select-var option:selected').val() + ')' + ' ';
+				this.editor.setValue(this.data.exp);
 			}
 			else {
 				this.data.exp += '(' + $('#select-var option:selected').val() + ')' + ' ';	
+				this.editor.setValue(this.data.exp);
 			}
 			break;
 		case 'add-log':
 			this.data.exp += $('#select-log option:selected').val() + ' ';
+			this.editor.setValue(this.data.exp);
 			break;
 		case 'add-val':
 			this.data.exp += $('#input-val').val() + ' ';
+			this.editor.setValue(this.data.exp);
 			break;
     	}
-
-    	console.log(this.data);
     },
 
     split_mdx: function() {
-    	this.data.mdx = this.data.mdx.split('\n');
+		this.data.mdx = this.data.mdx.split('\n');
+		this.data.tplmdx = this.data.mdx[1].split('NON EMPTY ');
+		this.data.tplmdx = this.data.tplmdx[1].split(' ON COLUMNS,');
+		this.data.tplmdx = this.data.tplmdx[0];
+    },
 
-    	console.log(this.data);
+    create_exp_filter: function() {	
+		var logExp = { logical_expression: this.editor.getValue() },
+	    	tpl = 'NON EMPTY FILTER(' + this.data.tplmdx + ', {logical_expression})' + ' ON COLUMNS,';
+
+		tpl = tpl.replace(/{(\w+)}/g, function(m, p) {
+			return logExp[p];
+		});
+
+    	this.data.mdx[1] = tpl;
+
+    	this.data.tplmdx = this.data.mdx[0] + ' ' + this.data.mdx[1] + ' ' + this.data.mdx[2] + ' ' + this.data.mdx[3];
+
+		console.log(this.data);
     }
 });

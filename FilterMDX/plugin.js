@@ -98,6 +98,7 @@ var FilterMDX = Backbone.View.extend({
 			this.data = {
 				exp: '',
 				mdx: '',
+				tplmdx: '',
         		metadata: [],
         		swap_var: '',
 	        	width: 0,
@@ -156,8 +157,6 @@ var FilterMDX = Backbone.View.extend({
 
         	this.data.height = ROWS;
     		this.data.width = COLUMNS;
-
-    		console.log(this.data);
 
         	// Render results
         	this.render();
