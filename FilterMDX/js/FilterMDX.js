@@ -2,8 +2,8 @@ var FilterMDX = Modal.extend({
     type: 'filtermdx',
 
     events: {
-    	'click .add-to-exp': 'logical_expression',
-    	'click #teste': 'create_exp_filter'
+        'click .add-to-exp': 'logical_expression',
+        'click .dialog_footer a': 'call'
     },
 
     buttons: [
@@ -91,7 +91,6 @@ var FilterMDX = Modal.extend({
 				// #4
 				'<div class="grid_12">' +
 					'<p>Prévia de saída:</p>' +
-					'<a href="javascript:void(0)" id="teste">teste</a>' +
 				'</div>' +
 			'</div>'
 		)({ args: args });
@@ -102,10 +101,10 @@ var FilterMDX = Modal.extend({
         });
 
         // Maintain `this` in callbacks
-		_.bindAll(this, 'start_editor');
+		_.bindAll(this, 'start_editor', 'logical_expression', 'split_mdx', 'create_exp_filter');
 
 		// start editor MDX
-		_.delay(this.start_editor, 1000);;
+		_.delay(this.start_editor, 1000);
 
 		// split expression MDX
 		this.split_mdx();
@@ -119,7 +118,7 @@ var FilterMDX = Modal.extend({
     logical_expression: function(event) {
        	switch (event.target.id) {
 		case 'add-var':
-			if (this.data.exp === '') {
+			if (_.isEmpty(this.data.exp)) {
 				this.data.exp = '(' + this.$el.find('#select-var option:selected').val() + ')' + ' ';
 				this.editor.setValue(this.data.exp);
 			}
@@ -155,33 +154,32 @@ var FilterMDX = Modal.extend({
     },
 
     create_exp_filter: function() {	
-		var logExp = { logical_expression: this.editor.getValue() },
-			tpl = '';
+		var logExp = { logical_expression: this.editor.getValue() };
 
 		if (this.data.swap_var === 'rows') {
-	    	tpl = 'NON EMPTY FILTER(' + this.data.tplmdx + ', {logical_expression})' + ' ON COLUMNS,';
+	    	this.data.tplmdx = 'NON EMPTY FILTER(' + this.data.tplmdx + ', {logical_expression})' + ' ON COLUMNS,';
 	    }
 	    else {
-	    	tpl = 'NON EMPTY FILTER(' + this.data.tplmdx + ', {logical_expression})' + ' ON ROWS';
+	    	this.data.tplmdx = 'NON EMPTY FILTER(' + this.data.tplmdx + ', {logical_expression})' + ' ON ROWS';
 	    }
 
-		tpl = tpl.replace(/{(\w+)}/g, function(m, p) {
+		this.data.tplmdx = this.data.tplmdx.replace(/{(\w+)}/g, function(m, p) {
 			return logExp[p];
 		});
 
     	if (this.data.swap_var === 'rows') {
-    		this.data.mdx[1] = tpl;
+    		this.data.mdx[1] = this.data.tplmdx;
     	}
     	else {
-    		this.data.mdx[2] = tpl;
+    		this.data.mdx[2] = this.data.tplmdx;
     	}
-
-    	// this.data.tplmdx = this.data.mdx[0] + ' ' + this.data.mdx[1] + ' ' + this.data.mdx[2] + ' ' + this.data.mdx[3];
 
     	this.data.tplmdx = '';
 
-    	for (var i = 0, len = this.data.mdx.length; i < len; i += 1) {
-    		this.data.tplmdx += this.data.mdx[i];
+    	for (var i in this.data.mdx) {
+    		if (this.data.mdx.hasOwnProperty(i)) {
+				this.data.tplmdx += this.data.mdx[i].concat(' ');	
+    		}
     	}
 
 		console.log(this.data);
