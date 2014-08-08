@@ -117,27 +117,55 @@ var FilterMDX = Modal.extend({
     start_editor: function() {
 		this.editor = ace.edit('editor-mdx');
 		this.editor.getSession().setMode('ace/mode/text');
+		this.editor.getSession().setUseWrapMode(true);
     },
 
-    logical_expression: function(event) {
+  //   logical_expression: function(event) {
+  //      	switch (event.target.id) {
+		// case 'add-var':
+		// 	if (_.isEmpty(this.data.exp)) {
+		// 		this.data.exp = '(' + this.$el.find('#select-var option:selected').val() + ')' + ' ';
+		// 		this.editor.setValue(this.data.exp);
+		// 	}
+		// 	else {
+		// 		this.data.exp += '(' + this.$el.find('#select-var option:selected').val() + ')' + ' ';	
+		// 		this.editor.setValue(this.data.exp);
+		// 	}
+		// 	break;
+		// case 'add-log':
+		// 	this.data.exp += this.$el.find('#select-log option:selected').val() + ' ';
+		// 	this.editor.setValue(this.data.exp);
+		// 	break;
+		// case 'add-val':
+		// 	this.data.exp += this.$el.find('#input-val').val() + ' ';
+		// 	this.editor.setValue(this.data.exp);
+		// 	break;
+  //   	}
+  //   },
+
+  	logical_expression: function(event) {
        	switch (event.target.id) {
 		case 'add-var':
 			if (_.isEmpty(this.data.exp)) {
 				this.data.exp = '(' + this.$el.find('#select-var option:selected').val() + ')' + ' ';
 				this.editor.setValue(this.data.exp);
+				this.data.exp = this.editor.getValue();
 			}
 			else {
 				this.data.exp += '(' + this.$el.find('#select-var option:selected').val() + ')' + ' ';	
 				this.editor.setValue(this.data.exp);
+				this.data.exp = this.editor.getValue();
 			}
 			break;
 		case 'add-log':
 			this.data.exp += this.$el.find('#select-log option:selected').val() + ' ';
 			this.editor.setValue(this.data.exp);
+			this.data.exp = this.editor.getValue();
 			break;
 		case 'add-val':
 			this.data.exp += this.$el.find('#input-val').val() + ' ';
 			this.editor.setValue(this.data.exp);
+			this.data.exp = this.editor.getValue();
 			break;
     	}
     },
