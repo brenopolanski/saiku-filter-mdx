@@ -44,7 +44,7 @@ var FilterMDX = Backbone.View.extend({
 	show: function() {		
 		this.data.mdx = localStorage.getItem('filter_mdx');
 
-		(new FilterMDX({ data: this.data })).render().open();
+		(new FilterMDX({ data: this.data, workspace: this.workspace })).render().open();
 	},
 
     receive_data: function(args) {
@@ -61,8 +61,6 @@ var FilterMDX = Backbone.View.extend({
     },
 
 	process_data: function(args) {
-		console.log(args);
-
         if (args.data.cellset && args.data.cellset.length > 0) {
         	var DIMENSION = ['Variavel', 'Variável'],
         		ROWS = args.data.cellset.length,

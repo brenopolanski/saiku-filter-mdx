@@ -14,6 +14,9 @@ var FilterMDX = Modal.extend({
     initialize: function(args) {
         this.options.title = 'Filter';
 
+        // Keep track of parent workspace
+		this.workspace = args.workspace;
+
         // set this.data with object of plugin.js
     	this.data = args.data;
 
@@ -101,7 +104,8 @@ var FilterMDX = Modal.extend({
         });
 
         // Maintain `this` in callbacks
-		_.bindAll(this, 'start_editor', 'logical_expression', 'split_mdx', 'create_exp_filter');
+		_.bindAll(this, 'start_editor', 'logical_expression', 'split_mdx', 'create_exp_filter',
+			      'post_mdx_transform', 'run_exp_filter');
 
 		// start editor MDX
 		_.delay(this.start_editor, 1000);
@@ -182,6 +186,27 @@ var FilterMDX = Modal.extend({
     		}
     	}
 
-		console.log(this.data);
+		_.delay(this.run_exp_filter, 500);
+    },
+
+    post_mdx_transform: function() {
+        var self = this;
+
+        this.workspace.query.action.post('/qm2mdx', {
+            success: function(response, model) {
+                self.workspace.query.parse(model);
+                self.workspace.query.set({ type: 'MDX', formatter: 'flat' });
+            }
+        });
+    },
+
+    run_exp_filter: function() {
+    	this.post_mdx_transform();
+
+    	this.workspace.query.run(true, this.data.tplmdx);
+
+		this.$el.dialog('destroy').remove();
+        this.$el.remove();
+        return false;
     }
 });
