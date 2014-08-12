@@ -29,7 +29,7 @@ var FilterMDX = Backbone.View.extend({
 
 	add_button: function() {
 		var button =
-			$('<a href="#filterMDX" class="filterMDX button disabled_toolbar i18n" title="FilterMDX"></a>')
+			$('<a href="#filterMDX" class="filterMDX button disabled_toolbar i18n" title="Filtro"></a>')
 			.css({ 'background-image': 'url("' + this.BASE_URL + 'image/plugin.png")',
 				   'background-repeat': 'no-repeat',
 				   'background-position': '50% 50%',
