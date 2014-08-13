@@ -16,6 +16,8 @@ var FilterMDX = Modal.extend({
 
         // Keep track of parent workspace
 		this.workspace = args.workspace;
+	
+	if (args.data !== undefined) {
 
         // set this.data with object of plugin.js
     	this.data = args.data;
@@ -158,6 +160,7 @@ var FilterMDX = Modal.extend({
 
 		// split expression MDX
 		this.split_mdx();
+	}
     },
 
     start_editor: function() {
