@@ -17,101 +17,88 @@ var FilterMDX = Modal.extend({
         // Keep track of parent workspace
 		this.workspace = args.workspace;
 
-        // set this.data with object of plugin.js
-    	this.data = args.data;
+		if (args.data !== undefined) {
 
-        this.message = _.template(
-			'<div class="container_12">' +
-				// #1
-				'<div class="grid_5">' +
-					'<div class="filtermdx-form">' +
-						'<label for="">Variável</label>' +
-						'<select class="form-control" name="select-var" id="select-var">' +
-							'<option value="">-- Selecione --</option>' +
-							'<% _.each(args.data.metadata, function(val) { %>' +
-							'<option value="<%= val.properties.uniquename %>"><%= val.colName %></option>' +
-							'<% }); %>' +
-						'</select>' +
-					'</div>' +
-				'</div>' +
-				'<div class="grid_1" style="margin-top: 18px;">' +
-					'<div class="filtermdx-form">' +
-						'<button class="form-control add-to-exp" name="add-var" id="add-var">add</button>' +
-					'</div>' +
-				'</div>' +
+	        // set this.data with object of plugin.js
+	    	this.data = args.data;
 
-				'<div class="grid_5">' +
-					'<div class="filtermdx-form">' +
-						'<label for="">Ano</label>' +
-						'<input type="text" class="form-control" name="" id="">' +
+	        this.message = _.template(
+				'<div class="container_12">' +
+					// #1
+					'<div class="grid_11">' +
+						'<div class="filtermdx-form">' +
+							'<label for="">Variável</label>' +
+							'<select class="form-control" name="select-var" id="select-var">' +
+								'<option value="">-- Selecione --</option>' +
+								'<% _.each(args.data.metadata, function(val) { %>' +
+								'<option value="<%= val.properties.uniquename %>"><%= val.colName %></option>' +
+								'<% }); %>' +
+							'</select>' +
+						'</div>' +
 					'</div>' +
-				'</div>' +
-				'<div class="grid_1" style="margin-top: 18px;">' +
-					'<div class="filtermdx-form">' +
-						'<button class="form-control" name="" id="">add</button>' +
+					'<div class="grid_1" style="margin-top: 18px;">' +
+						'<div class="filtermdx-form">' +
+							'<button class="form-control add-to-exp" name="add-var" id="add-var">add</button>' +
+						'</div>' +
 					'</div>' +
-				'</div>' +
-				// #2
-				'<div class="grid_5">' +
-					'<div class="filtermdx-form">' +
-						'<label for="">Lista de operadores lógicos</label>' +
-						'<select class="form-control" name="select-log" id="select-log">' +
-							'<option value="">-- Selecione --</option>' +
-							'<option value="=">Igual (=)</option>' +
-							'<option value="<>">Diferente (<>)</option>' +
-							'<option value=">">Maior (>)</option>' +
-							'<option value="<">Menor (<)</option>' +
-							'<option value=">=">Maior ou igual (>=)</option>' +
-							'<option value="<=">Menor ou igual (<=)</option>' +
-							'<option value="and">AND</option>' +
-							'<option value="or">OR</option>' +
-						'</select>' +
+					// #2
+					'<div class="grid_5">' +
+						'<div class="filtermdx-form">' +
+							'<label for="">Lista de operadores lógicos</label>' +
+							'<select class="form-control" name="select-log" id="select-log">' +
+								'<option value="">-- Selecione --</option>' +
+								'<option value="=">Igual (=)</option>' +
+								'<option value="<>">Diferente (<>)</option>' +
+								'<option value=">">Maior (>)</option>' +
+								'<option value="<">Menor (<)</option>' +
+								'<option value=">=">Maior ou igual (>=)</option>' +
+								'<option value="<=">Menor ou igual (<=)</option>' +
+								'<option value="and">AND</option>' +
+								'<option value="or">OR</option>' +
+							'</select>' +
+						'</div>' +
 					'</div>' +
-				'</div>' +
-				'<div class="grid_1" style="margin-top: 18px;">' +
-					'<div class="filtermdx-form">' +
-						'<button class="form-control add-to-exp" name="add-log" id="add-log">add</button>' +
+					'<div class="grid_1" style="margin-top: 18px;">' +
+						'<div class="filtermdx-form">' +
+							'<button class="form-control add-to-exp" name="add-log" id="add-log">add</button>' +
+						'</div>' +
 					'</div>' +
-				'</div>' +
 
-				'<div class="grid_5">' +
-					'<div class="filtermdx-form">' +
-						'<label for="">Digite um valor</label>' +
-						'<input type="text" class="form-control" name="input-val" id="input-val">' +
+					'<div class="grid_5">' +
+						'<div class="filtermdx-form">' +
+							'<label for="">Digite um valor</label>' +
+							'<input type="text" class="form-control" name="input-val" id="input-val">' +
+						'</div>' +
 					'</div>' +
-				'</div>' +
-				'<div class="grid_1" style="margin-top: 18px;">' +
-					'<div class="filtermdx-form">' +
-						'<button class="form-control add-to-exp" name="add-val" id="add-val">add</button>' +
+					'<div class="grid_1" style="margin-top: 18px;">' +
+						'<div class="filtermdx-form">' +
+							'<button class="form-control add-to-exp" name="add-val" id="add-val">add</button>' +
+						'</div>' +
 					'</div>' +
-				'</div>' +
-				// #3
-				'<div class="grid_12">' +
-					'<div class="filtermdx-form">' +
-						'<div id="editor-mdx"></div>' +
+					// #3
+					'<div class="grid_12">' +
+						'<div class="filtermdx-form">' +
+							'<div id="editor-mdx"></div>' +
+						'</div>' +
 					'</div>' +
-				'</div>' +
-				// #4
-				'<div class="grid_12">' +
-					'<p>Prévia de saída:</p>' +
-				'</div>' +
-			'</div>'
-		)({ args: args });
+				'</div>'
+			)({ args: args });
 
-        this.bind('open', function() {
-       		var self = this;
-        	$(self.el).parents('.ui-dialog').css({ width: '550px' });
-        });
+	        this.bind('open', function() {
+	       		var self = this;
+	        	$(self.el).parents('.ui-dialog').css({ width: '550px' });
+	        });
 
-        // Maintain `this` in callbacks
-		_.bindAll(this, 'start_editor', 'logical_expression', 'split_mdx', 'create_exp_filter',
-			      'post_mdx_transform', 'run_exp_filter');
+	        // Maintain `this` in callbacks
+			_.bindAll(this, 'start_editor', 'logical_expression', 'split_mdx', 'create_exp_filter',
+				      'post_mdx_transform', 'run_exp_filter');
 
-		// start editor MDX
-		_.delay(this.start_editor, 1000);
+			// start editor MDX
+			_.delay(this.start_editor, 1000);
 
-		// split expression MDX
-		this.split_mdx();
+			// split expression MDX
+			this.split_mdx();
+		}
     },
 
     start_editor: function() {
