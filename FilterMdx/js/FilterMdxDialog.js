@@ -1,4 +1,4 @@
-var FilterMDX = Modal.extend({
+var FilterMdxDialog = Modal.extend({
     type: 'filtermdx',
 
     events: {
