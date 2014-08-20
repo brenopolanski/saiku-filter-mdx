@@ -11,7 +11,7 @@ var FilterMdx = Backbone.View.extend({
 		this.workspace = args.workspace;
 
 		// Create a ID for use as the CSS selector
-        this.id = 'filterMdx';
+        this.id = 'filtermdx';
         this.$el.attr({ id: this.id });
 
 		// Base URL
@@ -61,8 +61,10 @@ var FilterMdx = Backbone.View.extend({
     },
 
 	process_data: function(args) {
+        console.log(args);
+
         if (args.data.cellset && args.data.cellset.length > 0) {
-        	var DIMENSION = ['Variavel', 'Variável'],
+        	var DIMENSION = ['Airport'],
         		ROWS = args.data.cellset.length,
 				COLUMNS = args.data.cellset[0].length;
 
@@ -128,8 +130,9 @@ var FilterMdx = Backbone.View.extend({
 
         	this.data.height = ROWS;
     		this.data.width = COLUMNS;
-        	
-        	// 
+
+            console.log(this.data);
+
         	this.set_localstorage_mdx();
         }
         else {

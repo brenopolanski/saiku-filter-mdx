@@ -17,6 +17,8 @@ var FilterMdxDialog = Modal.extend({
         // Keep track of parent workspace
 		this.workspace = args.workspace;
 
+		console.log(this.workspace.filterMdx.id);
+
 		if (args.data !== undefined) {
 
 	        // set this.data with object of plugin.js
@@ -30,7 +32,7 @@ var FilterMdxDialog = Modal.extend({
 							'<label for="">Variável</label>' +
 							'<select class="form-control" name="select-var" id="select-var">' +
 								'<option value="">-- Selecione --</option>' +
-								'<% _.each(args.data.metadata, function(val) { %>' +
+								'<% _.each(_.union(args.data.metadata), function(val) { %>' +
 								'<option value="<%= val.properties.uniquename %>"><%= val.colName %></option>' +
 								'<% }); %>' +
 							'</select>' +
