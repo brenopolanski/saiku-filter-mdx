@@ -1,21 +1,21 @@
 /**
- * Saiku UI Plugin Boilerplate - v0.2.0
+ * Calculated Field MDX - v0.1.0
  * A jump-start for Saiku UI plugins development.
  *
- * Made by Breno Polanski
+ * Made by Breno Polanski <breno.polanski@gmail.com>
  * Under MIT License
  */
-var FilterMDX = Backbone.View.extend({
+var CalculatedFieldMdx = Backbone.View.extend({
 	initialize: function(args) {
 		// Keep track of parent workspace
 		this.workspace = args.workspace;
 
-		// Create a ID for use as the CSS selector
-        this.id = 'filterMDX';
+		// Create a class for use as the CSS selector
+        this.class = 'calculatedfieldmdx';
         this.$el.attr({ id: this.id });
 
 		// Base URL
-        this.BASE_URL = 'js/saiku/plugins/FilterMDX/';
+        this.BASE_URL = 'js/saiku/plugins/CalculatedFieldMdx/';
 
 		// Maintain `this` in callbacks
 		_.bindAll(this, 'add_button', 'show', 'receive_data', 'process_data', 'set_localstorage_mdx');
@@ -29,7 +29,7 @@ var FilterMDX = Backbone.View.extend({
 
 	add_button: function() {
 		var button =
-			$('<a href="#filterMDX" class="filterMDX button disabled_toolbar i18n" title="Filtro"></a>')
+			$('<a href="#calculatedFieldMdx" class="calculatedFieldMdx button disabled_toolbar i18n" title="Campo Calculado"></a>')
 			.css({ 'background-image': 'url("' + this.BASE_URL + 'image/plugin.png")',
 				   'background-repeat': 'no-repeat',
 				   'background-position': '50% 50%',
@@ -38,13 +38,13 @@ var FilterMDX = Backbone.View.extend({
 
 		var li = $('<li class="seperator"></li>').append(button);
 		this.workspace.toolbar.$el.find('ul').append(li);
-		this.workspace.toolbar.filterMDX = this.show;
+		this.workspace.toolbar.calculatedFieldMdx = this.show;
 	},
 
 	show: function() {		
 		this.data.mdx = localStorage.getItem('filter_mdx');
 
-		(new FilterMDX({ data: this.data, workspace: this.workspace })).render().open();
+		(new CalculatedFieldMdxDialog({ data: this.data, workspace: this.workspace })).render().open();
 	},
 
     receive_data: function(args) {
@@ -129,7 +129,6 @@ var FilterMDX = Backbone.View.extend({
         	this.data.height = ROWS;
     		this.data.width = COLUMNS;
         	
-        	// 
         	this.set_localstorage_mdx();
         }
         else {
@@ -177,15 +176,12 @@ function loadJS(file) {
   */
 Saiku.events.bind('session:new', function() {
 
-	// load style CSS
-	loadCSS('js/saiku/plugins/FilterMDX/css/plugin.css');	
-
-	// load modal Filter MDX
-	loadJS('js/saiku/plugins/FilterMDX/js/FilterMDX.js');
+	loadCSS('js/saiku/plugins/CalculatedFieldMdx/css/plugin.css');	
+	loadJS('js/saiku/plugins/CalculatedFieldMdx/js/CalculatedFieldMdxDialog.js');
 
 	function new_workspace(args) {
-		if (typeof args.workspace.filterMDX === 'undefined') {
-			args.workspace.filterMDX = new FilterMDX({ workspace: args.workspace });
+		if (typeof args.workspace.calculatedFieldMdx === 'undefined') {
+			args.workspace.calculatedFieldMdx = new CalculatedFieldMdx({ workspace: args.workspace });
 		}
 	}
 
